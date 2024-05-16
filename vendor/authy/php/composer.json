@@ -1,0 +1,33 @@
+{
+    "name": "authy/php",
+    "type": "library",
+    "description": "PHP client for Authy",
+    "keywords": ["api", "authentication", "two-factor", "2fa"],
+    "homepage": "https://github.com/twilio/authy-php",
+    "license": "MIT",
+    "require": {
+        "php": "^7.2.5||^8.0",
+        "guzzlehttp/guzzle": "~6.0||~7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8||^9"
+    },
+    "authors": [
+        {
+            "name": "Twilio Authy",
+            "email": "help@twilio.com",
+            "homepage": "https://www.twilio.com/docs/authy/api",
+            "role": "Official support"
+        },
+        {
+            "name": "Kelley Robinson",
+            "email": "krobinson@twilio.com",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Authy": "lib"
+        }
+    }
+}
