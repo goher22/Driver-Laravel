@@ -48,6 +48,10 @@
 				<a href="{{route('users.index')}}" class="list-group-item list-group-item-action"><i class="material-icons">supervisor_account</i> {{__('Users')}}</a>
 			@endcan
 
+			@can('vehicles_access')
+				<a href="{{route('vehicles.index')}}" class="list-group-item list-group-item-action"><i class="material-icons">directions_car</i> {{__('Vehicles')}}</a>
+			@endcan
+
 			@can('activitylog_access')
 				<a href="{{route('activitylog.index')}}" class="list-group-item list-group-item-action"><i class="material-icons">list</i> {{__('Activity Log')}}</a>
 			@endcan

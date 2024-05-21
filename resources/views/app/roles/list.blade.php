@@ -96,7 +96,7 @@
                                             @endcan
                                         </td>
                                         <td width="1">
-                                            @if($role->id !== 1)
+                                            @if($role->id !== 1 && $role->id !== 2)
                                                 @can('roles_delete')
                                                     <form action="{{ route('roles.destroy', $role->id) }}" method="POST">
                                                         @method('DELETE')

@@ -51,6 +51,12 @@ Route::middleware($middlewares)->group(function(){
 	    Route::get('users/{id}/delete-photo', 'UserController@deletePhoto')->name('users.delete_photo');
 	});
 
+	Route::group(['middleware' => ['permission:vehicles_access']], function () {
+		Route::resources(['vehicles' => 'VehicleController']);
+		Route::post('vehicles/{id}/update-photo', 'VehicleController@updatePhoto')->name('vehicles.update_photo');
+		Route::get('vehicles/{id}/delete-photo', 'VehicleController@deletePhoto')->name('vehicles.delete_photo');
+	});
+
 	Route::group(['middleware' => ['permission:activitylog_access']], function () {
 		Route::get('activitylog', 'ActivityLogController@index')->name('activitylog.index');
 		Route::get('activitylog/{id}', 'ActivityLogController@show')->name('activitylog.show');

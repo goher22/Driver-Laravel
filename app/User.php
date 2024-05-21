@@ -46,6 +46,11 @@ class User extends Authenticatable implements MustVerifyEmail, Auditable
         return $this->belongsTo('App\Country', 'country_id');
     }
 
+    public function vehicles()
+    {
+        return $this->hasMany('App\Vehicle', 'user_id');
+    }
+
     public function isSuperAdmin(){
         return $this->is_superadmin == 1 ? true : false;
     }

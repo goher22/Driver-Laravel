@@ -40,6 +40,12 @@ class UserRoleSeeder extends Seeder
             ['name' => 'users_ban', 'display_name' => 'Ban/Activate User', 'group_name' => 'Users', 'group_slug' => 'users', 'guard_name' => 'web'],
             ['name' => 'users_activity', 'display_name' => 'Activity Log', 'group_name' => 'Users', 'group_slug' => 'users', 'guard_name' => 'web'],
 
+            ['name' => 'vehicles_access', 'display_name' => 'Access', 'group_name' => 'Vehicles', 'group_slug' => 'vehicles', 'guard_name' => 'web'],
+            ['name' => 'vehicles_create', 'display_name' => 'Create', 'group_name' => 'Vehicles', 'group_slug' => 'vehicles', 'guard_name' => 'web'],
+            ['name' => 'vehicles_show', 'display_name' => 'Show', 'group_name' => 'Vehicles', 'group_slug' => 'vehicles', 'guard_name' => 'web'],
+            ['name' => 'vehicles_edit', 'display_name' => 'Edit', 'group_name' => 'Vehicles', 'group_slug' => 'vehicles', 'guard_name' => 'web'],
+            ['name' => 'vehicles_delete', 'display_name' => 'Delete', 'group_name' => 'Vehicles', 'group_slug' => 'vehicles', 'guard_name' => 'web'],
+
             ['name' => 'roles_access', 'display_name' => 'Access', 'group_name' => 'Roles', 'group_slug' => 'roles', 'guard_name' => 'web'],
             ['name' => 'roles_create', 'display_name' => 'Create', 'group_name' => 'Roles', 'group_slug' => 'roles', 'guard_name' => 'web'],
             ['name' => 'roles_show', 'display_name' => 'Show', 'group_name' => 'Roles', 'group_slug' => 'roles', 'guard_name' => 'web'],
@@ -68,19 +74,46 @@ class UserRoleSeeder extends Seeder
         $user->assignRole($adminRole);
         $adminRole->givePermissionTo($assignPermissions);
 
+
         $userRole = Role::create([
-            'id' => 2,
+            'id' => 3,
             'name' => 'user',
             'guard_name' => 'web'
         ]);
-
         
         $assignUserPermissions = $getPermissions->map(function($item){
-            $restrictedPerms = ['users_delete', 'users_ban', 'users_activity', 'roles_delete', 'permissions_delete', 'activitylog_delete'];
+            $restrictedPerms = [
+                'users_delete', 
+                'users_ban', 
+                'users_activity', 
+                'roles_delete', 
+                'permissions_delete', 
+                'activitylog_delete'
+            ];
             if(!in_array($item->name, $restrictedPerms)){
                 return [$item->name];
             }
         });
         $userRole->givePermissionTo($assignUserPermissions);
+
+        $driverRole = Role::create([
+            'id' => 2,
+            'name' => 'driver',
+            'guard_name' => 'web'
+        ]);
+
+        $assignDriverPermissions = $getPermissions->map(function($item){
+            $restrictedPerms = [
+                'vehicles_access', 
+                'vehicles_create',
+                'vehicles_show',
+                'vehicles_edit',
+                'vehicles_delete'
+            ];
+            if(in_array($item->name, $restrictedPerms)){
+                return [$item->name];
+            }
+        });
+        $driverRole->givePermissionTo($assignDriverPermissions);
     }
 }
