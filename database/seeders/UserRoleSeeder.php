@@ -46,6 +46,8 @@ class UserRoleSeeder extends Seeder
             ['name' => 'vehicles_edit', 'display_name' => 'Edit', 'group_name' => 'Vehicles', 'group_slug' => 'vehicles', 'guard_name' => 'web'],
             ['name' => 'vehicles_delete', 'display_name' => 'Delete', 'group_name' => 'Vehicles', 'group_slug' => 'vehicles', 'guard_name' => 'web'],
 
+            ['name' => 'document_show', 'display_name' => 'Show', 'group_name' => 'Document', 'group_slug' => 'document', 'guard_name' => 'web'],
+
             ['name' => 'roles_access', 'display_name' => 'Access', 'group_name' => 'Roles', 'group_slug' => 'roles', 'guard_name' => 'web'],
             ['name' => 'roles_create', 'display_name' => 'Create', 'group_name' => 'Roles', 'group_slug' => 'roles', 'guard_name' => 'web'],
             ['name' => 'roles_show', 'display_name' => 'Show', 'group_name' => 'Roles', 'group_slug' => 'roles', 'guard_name' => 'web'],

@@ -53,8 +53,12 @@ Route::middleware($middlewares)->group(function(){
 
 	Route::group(['middleware' => ['permission:vehicles_access']], function () {
 		Route::resources(['vehicles' => 'VehicleController']);
-		Route::post('vehicles/{id}/update-photo', 'VehicleController@updatePhoto')->name('vehicles.update_photo');
-		Route::get('vehicles/{id}/delete-photo', 'VehicleController@deletePhoto')->name('vehicles.delete_photo');
+		Route::get('vehicles/{id}/documents', 'VehicleController@showDocument')->name('vehicles.show_document');
+		Route::put('vehicles/status/{id}', 'VehicleController@updateStatus')->name('vehicles.status');
+	});
+
+	Route::group(['middleware' => ['permission:photo_access']], function () {
+		Route::post('upload/vehicle/{name_file}/{id}', 'FileUploadController@updateFileVehicle')->name('vehicles.update_photo');
 	});
 
 	Route::group(['middleware' => ['permission:activitylog_access']], function () {

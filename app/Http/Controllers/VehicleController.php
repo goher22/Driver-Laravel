@@ -161,6 +161,8 @@ class VehicleController extends Controller
 
             if($vehicle->update($data)){
                 return redirect('vehicles/'.$id)->with('success',__("vehicle updated!"));
+            } else {
+                return redirect('vehicles/' . $id)->with('error', __("Failed to update vehicle!"));
             }
 
         } else {
@@ -194,34 +196,37 @@ class VehicleController extends Controller
         }
     }
 
-    /**
-     * Update profile photo.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function updatePhoto(Request $request, $id){
-        try{
-            $vehicle = Vehicle::find($id);
+    public function updateStatus ($id)
+    {
+        $user = Auth::user();
 
-            if($vehicle){
-                $data = $request->image;
-    
-                list($type, $data) = explode(';', $data);
-                list(, $data)      = explode(',', $data);
-    
-                $data = base64_decode($data);
-                $image_name = 'vehicle_'.$vehicle->id.'.png';
-                $path = storage_path() . "/app/avatars/" . $image_name;
-    
-                file_put_contents($path, $data);
-    
-                return response()->json(['success'=>'done']);
-            } else {
-                return response()->json(['error'=>__("Vehicle not found!")]);
-            }
-        }catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while updating the photo.', 'message' => $e->getMessage()], 500);
+        if(!$user->isSuperAdmin()){
+            return redirect('vehicles')->with('error',__("Super admin user cannot be deleted!"));
         }
+
+        $vehicle = Vehicle::find($id);
+
+        if($vehicle){
+            $vehicle->status = !$vehicle->isStatus();
+
+            if($vehicle->save()){
+                return redirect('vehicles/'.$id)->with('success',__("vehicle updated!"));
+            }else {
+                return redirect('vehicles/' . $id)->with('error', __("Failed to update vehicle status!"));
+            }
+        } else {
+            return redirect('vehicles')->with('error',__("vehicle not found!"));
+        }
+
+        return view('app.vehicles.document', ['user' => $user, 'vehicle' => $vehicle]);
     }
+
+    public function showDocument(Request $request, $id)
+    {
+        $user = Auth::user();
+
+        $vehicle = Vehicle::find($id);
+        return view('app.vehicles.document', ['user' => $user, 'vehicle' => $vehicle]);
+    }
+
 }
