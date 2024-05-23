@@ -30,6 +30,22 @@
                         </button>
                     </form>
 
+                    <a href="#" id="addGalleryPhoto" class="btn btn-success btn-round">
+                        <i class="material-icons">add</i>
+                        <span class="d-md-inline d-none">
+                            {{ __('Add Gallery') }}
+                            </span>
+                    </a>
+
+                    <button class="btn btn-success btn-round d-none" id="updateGalleryPhoto">
+                        <i class="material-icons">photo</i> 
+                        {{__('Update Photo')}}
+                    </button>
+
+                    <div class="d-none" id="addGalleryUpdatePhoto">
+                        <input type="file" class="custom-file-input profile-photo-input" id="addGalleryUpload">
+                    </div>
+
 
                 @endif
 
@@ -66,7 +82,7 @@
                         <div class="card-body">
                             @include('app.vehicles.nav')
                             <h4>{{__('Documents')}}</h4>
-                            <div class="row">
+                            <div class="row mb-4">
 
                                 <div class="col-md-3">
                                     <div class="card">
@@ -158,60 +174,60 @@
 
     <script type="text/javascript">
 
-document.addEventListener('DOMContentLoaded', function () {
-        const deleteButtons = document.querySelectorAll('.deleteVehicleBtn');
-        const activateButtons = document.querySelectorAll('.activateBtn');
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButtons = document.querySelectorAll('.deleteVehicleBtn');
+            const activateButtons = document.querySelectorAll('.activateBtn');
 
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const formId = this.getAttribute('data-form-id');
-                const confirmMessage = this.getAttribute('data-confirm-message');
-                bootbox.confirm({
-                    message: confirmMessage,
-                    buttons: {
-                        confirm: {
-                            label: 'Yes',
-                            className: 'btn-primary'
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const formId = this.getAttribute('data-form-id');
+                    const confirmMessage = this.getAttribute('data-confirm-message');
+                    bootbox.confirm({
+                        message: confirmMessage,
+                        buttons: {
+                            confirm: {
+                                label: 'Yes',
+                                className: 'btn-primary'
+                            },
+                            cancel: {
+                                label: 'No',
+                                className: 'btn-danger'
+                            }
                         },
-                        cancel: {
-                            label: 'No',
-                            className: 'btn-danger'
+                        callback: function (result) {
+                            if (result) {
+                                document.getElementById(formId).submit();
+                            }
                         }
-                    },
-                    callback: function (result) {
-                        if (result) {
-                            document.getElementById(formId).submit();
+                    });
+                });
+            });
+
+            activateButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const formId = this.getAttribute('data-form-id');
+                    const confirmMessage = this.getAttribute('data-confirm-message-status');
+                    bootbox.confirm({
+                        message: confirmMessage,
+                        buttons: {
+                            confirm: {
+                                label: 'Yes',
+                                className: 'btn-primary'
+                            },
+                            cancel: {
+                                label: 'No',
+                                className: 'btn-danger'
+                            }
+                        },
+                        callback: function (result) {
+                            if (result) {
+                                document.getElementById(formId).submit();
+                            }
                         }
-                    }
+                    });
                 });
             });
         });
-
-        activateButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const formId = this.getAttribute('data-form-id');
-                const confirmMessage = this.getAttribute('data-confirm-message-status');
-                bootbox.confirm({
-                    message: confirmMessage,
-                    buttons: {
-                        confirm: {
-                            label: 'Yes',
-                            className: 'btn-primary'
-                        },
-                        cancel: {
-                            label: 'No',
-                            className: 'btn-danger'
-                        }
-                    },
-                    callback: function (result) {
-                        if (result) {
-                            document.getElementById(formId).submit();
-                        }
-                    }
-                });
-            });
-        });
-    });
 
 
         $.ajaxSetup({
@@ -220,6 +236,40 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
+        /*$addGalleryUploadCrop = $('#expensive-insurance-upload-photo-container').croppie({
+            url: "{{$user->photo !== null ? url('uploads/avatars/'.$user->photo) : asset('img/placeholder.png')}}",
+            enableExif: true,
+            viewport: {
+                width: 200,
+                height: 200,
+            },
+            boundary: {
+                width: 250,
+                height: 250
+            }
+        });*/
+
+        $('#addGalleryUpload').on('change', function () { 
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                /*$addGalleryUploadCrop.croppie('bind', {
+                    url: e.target.result
+                }).then(function(){
+                    //console.log('jQuery bind complete');
+                });*/
+            }
+            reader.readAsDataURL(this.files[0]);
+        });
+
+        $('.updateGalleryPhoto').on('click', function (ev) {
+
+        });
+
+        $("#addGalleryPhoto").click(function(){
+            $("#addGalleryPhoto").hide();
+            $("#updateGalleryPhoto").removeClass('d-none');
+            $("#addGalleryUpload").trigger("click");
+        });
 
         $expensiveInsuranceUploadCrop = $('#expensive-insurance-upload-photo-container').croppie({
             url: "{{$user->photo !== null ? url('uploads/avatars/'.$user->photo) : asset('img/placeholder.png')}}",
