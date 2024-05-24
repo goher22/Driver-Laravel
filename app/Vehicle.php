@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class Vehicle extends Model
 {
@@ -19,17 +19,28 @@ class Vehicle extends Model
         'status',
     ];
 
-    public function validationPhoto() {
-        $photoPath = 'app/avatars/vehicle_' . $this->id.'.png';
-        $photoExists = Storage::exists($photoPath);
+    private function validationPhoto($name_file) {
 
-        return $photoExists;
+        $directory = storage_path('app/vehicles/');
+        $image_name = $name_file.'_' . $this->id . '.png';
+
+        $path = $directory . $image_name;
+
+        if (!File::exists($directory)) {
+            return false;
+        }
+
+        if (!File::exists($path)) {
+            return false;
+        }
+
+        return true;
     }
 
-    public function urlPhoto() {
-        $photoPath = '/uploads/avatars/vehicle_' . $this->id.'.png';
+    public function urlPhoto($name_file) {
+        $photoPath = '/uploads/vehicles/'.$name_file.'_'. $this->id.'.png';
 
-        return $this->validationPhoto() ? $photoPath : asset('img/placeholder.png');
+        return $this->validationPhoto($name_file) ? url($photoPath) : asset('img/placeholder.png');
     }
 
     public function isStatus() {

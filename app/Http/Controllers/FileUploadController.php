@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Http\Request;
 use App\Vehicle;
 
 class FileUploadController extends Controller
@@ -23,16 +23,21 @@ class FileUploadController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function updateFileVehicle(Request $request, $id, $name_file){
+    public function updateFileVehicle(Request $request, $name_file, $id){
         try{
             $vehicle = Vehicle::find($id);
             if ($vehicle) {
                 $data = $request->image;
 
+                if($name_file === "gallery"){
+                    $name_file = $name_file. '_' . time() .'_' .$vehicle->id . '.png';
+                }else{
+                    $name_file = $name_file. '_' . $vehicle->id . '.png';
+                }
                 $this->updateFile(
                     $data, 
-                    storage_path('app/vehicle/'), 
-                    $name_file.'_' . $vehicle->id . '.png'
+                    storage_path('app/vehicles/'), 
+                    $name_file
                 );
 
                 return response()->json(['success' => 'done']);
@@ -51,6 +56,7 @@ class FileUploadController extends Controller
             list(, $data)      = explode(',', $data);
 
             $dataBase64 = base64_decode($data);
+
             $path = $directory . $image_name;
 
             if (!File::exists($directory)) {

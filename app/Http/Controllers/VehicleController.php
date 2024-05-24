@@ -8,7 +8,7 @@ use App\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class VehicleController extends Controller
 {
@@ -226,7 +226,34 @@ class VehicleController extends Controller
         $user = Auth::user();
 
         $vehicle = Vehicle::find($id);
-        return view('app.vehicles.document', ['user' => $user, 'vehicle' => $vehicle]);
+
+        $images =  $this->showFileVehicle($id, "gallery");
+        
+        return view('app.vehicles.document', ['user' => $user, 'vehicle' => $vehicle,'images' => $images]);
+    }
+
+    private function showFileVehicle($id, $search){
+        $images = File::files(storage_path('app/vehicles/'));
+
+        $imageFiles = array_filter($images, function ($file) use ($search, $id) {
+
+            $mimeType = File::mimeType($file);
+            $fileName = basename($file);
+
+            $parts = explode('_', $fileName);
+
+            if (count($parts) >= 3) {
+                $fileIdPart = basename($parts[count($parts) - 1], '.' . File::extension($fileName));
+                $matchesSearchAndId = ($parts[0] === $search) && ($fileIdPart === (string)$id);
+
+                return str_contains($mimeType, 'image/') && $matchesSearchAndId;
+            }
+
+            return false;
+        });
+
+        return $imageFiles;
+
     }
 
 }

@@ -29,24 +29,6 @@
                             <span class="d-md-inline d-none">{{ $vehicle->isStatus() ? __('Active') : __('Deactive') }}</span>
                         </button>
                     </form>
-
-                    <a href="#" id="addGalleryPhoto" class="btn btn-success btn-round">
-                        <i class="material-icons">add</i>
-                        <span class="d-md-inline d-none">
-                            {{ __('Add Gallery') }}
-                            </span>
-                    </a>
-
-                    <button class="btn btn-success btn-round d-none" id="updateGalleryPhoto">
-                        <i class="material-icons">photo</i> 
-                        {{__('Update Photo')}}
-                    </button>
-
-                    <div class="d-none" id="addGalleryUpdatePhoto">
-                        <input type="file" class="custom-file-input profile-photo-input" id="addGalleryUpload">
-                    </div>
-
-
                 @endif
 
                 <a href="{{route('vehicles.index')}}" class="btn btn-secondary btn-round"><i class="material-icons md-18">arrow_back</i> <span class="d-md-inline d-none">{{__('Back To List')}}</span></a>
@@ -90,15 +72,7 @@
                                             <div class="text-center" id="expensiveInsurancePhoto">
                                                 <div class="thumb thumb-slide mb-2">
                                                     <div id="expensiveInsurancePhotoImg">
-                                                        @if($user->photo !== null) 
-                                                            <img src="{{url('uploads/avatars/'.$user->photo)}}" alt="">
-                                                        @else
-                                                            @if($user->social_avatar !== null)
-                                                                <img src="{{$user->social_avatar}}" alt="">
-                                                            @else
-                                                                <img src="{{asset('img/placeholder.png')}}" alt="">
-                                                            @endif
-                                                        @endif
+                                                        <img src="{{$vehicle->urlPhoto('expensiveInsurance')}}" alt="">
                                                     </div>
                                                     <div class="caption">
                                                         <span>
@@ -130,15 +104,7 @@
                                             <div class="text-center" id="titleOfTheCarshowPhoto">
                                                 <div class="thumb thumb-slide mb-2">
                                                     <div id="titleOfTheCarsPhotoImg">
-                                                        @if($user->photo !== null) 
-                                                            <img src="{{url('uploads/avatars/'.$user->photo)}}" alt="">
-                                                        @else
-                                                            @if($user->social_avatar !== null)
-                                                                <img src="{{$user->social_avatar}}" alt="">
-                                                            @else
-                                                                <img src="{{asset('img/placeholder.png')}}" alt="">
-                                                            @endif
-                                                        @endif
+                                                        <img src="{{$vehicle->urlPhoto('titleOfTheCar')}}" alt="">
                                                     </div>
                                                     <div class="caption">
                                                         <span>
@@ -165,15 +131,69 @@
                                 </div>
                             </div>
                             <h4>{{__('Gallery')}}</h4>
+                            <div class="row mb-4">
+                                @if($user->isSuperAdmin())
+                                    <div class="col-md-3">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="text-center" id="addGalleryPhoto">
+                                                    <div class="thumb thumb-slide mb-2">
+                                                        <div id="addGalleryPhotoImg">
+                                                            <img src="{{asset('img/img_photo.png')}}" alt="">
+                                                        </div>
+                                                        <div class="caption">
+                                                            <span>
+                                                                <a href="#" id="addGalleryEditPhoto" class="btn btn-success btn-round"><i class="material-icons">add</i></a>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <h5>{{__('Add Photo')}}</h5>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12 text-center d-none" id="updateGalleryPhoto">
+                                                        <div id="gallery-upload-photo-container"></div>
+
+                                                        <input type="file" class="custom-file-input profile-photo-input" id="addGalleryUpload">
+
+                                                        <button class="btn btn-success btn-round mt-2 gallery-upload-result"><i class="material-icons">photo</i> {{__('Update Photo')}}</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                @foreach ($images as $image)
+                                    <div class="col-md-3">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="text-center">
+                                                    <div class="thumb thumb-slide mb-2">
+                                                        <img src="{{ url('/uploads/vehicles/'.basename($image)) }}" alt="Imagen de Vehículo">
+                                                    </div>
+                                                    <div class="caption">
+                                                        <span>
+                                                            @if($user->isSuperAdmin())
+                                                                <a href="{{route('users.delete_photo', $user->id)}}" class="btn btn-danger btn-round confirmBtn" data-confirm-message="{{__('Are you sure you want to delete user profile photo?')}}">
+                                                                    <i class="material-icons md-18">delete</i>
+                                                                </a>
+                                                            @endif
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     <script type="text/javascript">
-
         document.addEventListener('DOMContentLoaded', function () {
             const deleteButtons = document.querySelectorAll('.deleteVehicleBtn');
             const activateButtons = document.querySelectorAll('.activateBtn');
@@ -229,50 +249,14 @@
             });
         });
 
-
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
 
-        /*$addGalleryUploadCrop = $('#expensive-insurance-upload-photo-container').croppie({
-            url: "{{$user->photo !== null ? url('uploads/avatars/'.$user->photo) : asset('img/placeholder.png')}}",
-            enableExif: true,
-            viewport: {
-                width: 200,
-                height: 200,
-            },
-            boundary: {
-                width: 250,
-                height: 250
-            }
-        });*/
-
-        $('#addGalleryUpload').on('change', function () { 
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                /*$addGalleryUploadCrop.croppie('bind', {
-                    url: e.target.result
-                }).then(function(){
-                    //console.log('jQuery bind complete');
-                });*/
-            }
-            reader.readAsDataURL(this.files[0]);
-        });
-
-        $('.updateGalleryPhoto').on('click', function (ev) {
-
-        });
-
-        $("#addGalleryPhoto").click(function(){
-            $("#addGalleryPhoto").hide();
-            $("#updateGalleryPhoto").removeClass('d-none');
-            $("#addGalleryUpload").trigger("click");
-        });
-
         $expensiveInsuranceUploadCrop = $('#expensive-insurance-upload-photo-container').croppie({
-            url: "{{$user->photo !== null ? url('uploads/avatars/'.$user->photo) : asset('img/placeholder.png')}}",
+            url: "{{$vehicle->urlPhoto('expensiveInsurance')}}",
             enableExif: true,
             viewport: {
                 width: 200,
@@ -282,6 +266,12 @@
                 width: 250,
                 height: 250
             }
+        });
+
+        $("#expensiveInsuranceEditPhoto").click(function(){
+            $("#expensiveInsurancePhoto").hide();
+            $("#expensiveInsuranceUpdatePhoto").removeClass('d-none');
+            $("#expensiveInsuranceUpload").trigger("click");
         });
 
         $('#expensiveInsuranceUpload').on('change', function () { 
@@ -301,17 +291,22 @@
                 type: 'canvas',
                 size: 'viewport'
             }).then(function (resp) {
+                $.ajax({
+                    url: "{{route('vehicles.update_photo', ['name_file' => 'expensiveInsurance', 'id' =>$vehicle->id])}}",
+                    type: "POST",
+                    data: {"image":resp},
+                    success: function (data) {
+                        html = '<img src="' + resp + '" />';
+                        $("#expensiveInsurancePhotoImg").html(html);
+                        $("#expensiveInsurancePhoto").show();
+                        $("#expensiveInsuranceUpdatePhoto").addClass('d-none');
+                    }
+                });
             });
         });
 
-        $("#expensiveInsuranceEditPhoto").click(function(){
-            $("#expensiveInsurancePhoto").hide();
-            $("#expensiveInsuranceUpdatePhoto").removeClass('d-none');
-            $("#expensiveInsuranceUpload").trigger("click");
-        });
-
-        $titleOfTheCarsUploadCrop = $('#title-of-the-cars-upload-photo-container').croppie({
-            url: "{{$user->photo !== null ? url('uploads/avatars/'.$user->photo) : asset('img/placeholder.png')}}",
+        $titleOfTheCarUploadCrop = $('#title-of-the-cars-upload-photo-container').croppie({
+            url: "{{$vehicle->urlPhoto('titleOfTheCar')}}",
             enableExif: true,
             viewport: {
                 width: 200,
@@ -323,10 +318,16 @@
             }
         });
 
+        $("#titleOfTheCarsEditPhoto").click(function(){
+            $("#titleOfTheCarshowPhoto").hide();
+            $("#titleOfTheCarsUpdatePhoto").removeClass('d-none');
+            $("#titleOfTheCarsUpload").trigger("click");
+        });
+
         $('#titleOfTheCarsUpload').on('change', function () { 
             var reader = new FileReader();
             reader.onload = function (e) {
-                $titleOfTheCarsUploadCrop.croppie('bind', {
+                $titleOfTheCarUploadCrop.croppie('bind', {
                     url: e.target.result
                 }).then(function(){
                     //console.log('jQuery bind complete');
@@ -336,18 +337,74 @@
         });
 
         $('.title-of-the-cars-upload-result').on('click', function (ev) {
-            $titleOfTheCarsUploadCrop.croppie('result', {
+            $titleOfTheCarUploadCrop.croppie('result', {
                 type: 'canvas',
                 size: 'viewport'
             }).then(function (resp) {
+                $.ajax({
+                    url: "{{route('vehicles.update_photo', ['name_file' => 'titleOfTheCar', 'id' =>$vehicle->id])}}",
+                    type: "POST",
+                    data: {"image":resp},
+                    success: function (data) {
+                        html = '<img src="' + resp + '" />';
+                        $("#titleOfTheCarsPhotoImg").html(html);
+                        $("#titleOfTheCarshowPhoto").show();
+                        $("#titleOfTheCarsUpdatePhoto").addClass('d-none');
+                    }
+                });
             });
         });
 
-        $("#titleOfTheCarsEditPhoto").click(function(){
-            $("#titleOfTheCarshowPhoto").hide();
-            $("#titleOfTheCarsUpdatePhoto").removeClass('d-none');
-            $("#titleOfTheCarsUpload").trigger("click");
+        $addGalleryUploadCrop = $('#gallery-upload-photo-container').croppie({
+            url: "{{asset('img/img_photo.png')}}",
+            enableExif: true,
+            viewport: {
+                width: 200,
+                height: 200,
+            },
+            boundary: {
+                width: 250,
+                height: 250
+            }
         });
+
+        $("#addGalleryEditPhoto").click(function(){
+            $("#addGalleryPhoto").hide();
+            $("#updateGalleryPhoto").removeClass('d-none');
+            $("#addGalleryUpload").trigger("click");
+        });
+        
+        $('#addGalleryUpload').on('change', function () { 
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                console.log(e.target.result);
+                $addGalleryUploadCrop.croppie('bind', {
+                    url: e.target.result
+                }).then(function(){
+                    //console.log('jQuery bind complete');
+                });
+            }
+            reader.readAsDataURL(this.files[0]);
+        });
+
+        $('.gallery-upload-result').on('click', function (ev) {
+            $addGalleryUploadCrop.croppie('result', {
+                type: 'canvas',
+                size: 'viewport'
+            }).then(function (resp) {
+                console.log(resp);
+                $.ajax({
+                    url: "{{route('vehicles.update_photo', ['name_file' => 'gallery', 'id' =>$vehicle->id])}}",
+                    type: "POST",
+                    data: {"image":resp},
+                    success: function (data) {
+                        $("#addGalleryPhoto").show();
+                        $("#updateGalleryPhoto").addClass('d-none');
+                    }
+                });
+            })
+        });
+        
 
     </script>
 @endsection
