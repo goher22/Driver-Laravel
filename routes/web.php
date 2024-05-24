@@ -59,6 +59,7 @@ Route::middleware($middlewares)->group(function(){
 
 	Route::group(['middleware' => ['permission:document_update']], function () {
 		Route::post('upload/vehicle/{name_file}/{id}', 'FileUploadController@updateFileVehicle')->name('vehicles.update_photo');
+		Route::post('upload/user/{name_file}/{id}', 'FileUploadController@updateFileUser')->name('user.update_photo');
 	});
 
 	Route::group(['middleware' => ['permission:activitylog_access']], function () {
@@ -93,4 +94,5 @@ Route::middleware($middlewares)->group(function(){
 
 	Route::get('uploads/avatars/{file_path}', 'AvatarController@showAvatar');
 	Route::get('uploads/vehicles/{file_path}', 'AvatarController@showVehicles');
+	Route::get('uploads/user/{file_path}', 'AvatarController@showUser');
 });

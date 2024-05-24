@@ -25,6 +25,33 @@
                 <form method="POST" action="{{ route('users.update', $user->id) }}">
                     @method('PATCH')
                     @csrf
+
+                    <div class="form-group row">
+                        <div class="col-md-2">{{ __('Document') }}</div>
+                        <div class="col-md-8">
+                            <input id="document" type="text" class="form-control{{ $errors->has('document') ? ' is-invalid' : '' }}" name="document" value="{{ $user->document }}" required autofocus>
+
+                            @if ($errors->has('document'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('document') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-2">{{ __('License Number') }}</div>
+                        <div class="col-md-8">
+                            <input id="license_number" type="text" class="form-control{{ $errors->has('license_number') ? ' is-invalid' : '' }}" name="license_number" value="{{ $user->license_number }}" required autofocus>
+
+                            @if ($errors->has('license_number'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('license_number') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <div class="col-md-2">{{ __('Name') }}</div>
                         <div class="col-md-8">

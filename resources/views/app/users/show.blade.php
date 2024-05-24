@@ -63,6 +63,20 @@
                 <div class="card bg-white">
                     <div class="card-body">
                         @include('app.users.nav')
+                        <div class="form-group row">
+                            <div class="col-md-2">{{ __('Document') }}</div>
+                            <div class="col-md-8">
+                                {{ $user->document }}
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-2">{{ __('License Number') }}</div>
+                            <div class="col-md-8">
+                                {{ $user->license_number }}
+                            </div>
+                        </div>
+
 
                         <div class="form-group row">
                             <div class="col-md-2">{{ __('Name') }}</div>
@@ -100,6 +114,76 @@
                                 {{ $user->email }}
                             </div>
                         </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-2 mb-3">{{ __('Documents') }}</div>
+                            <div class="col-md-12 row">
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="text-center" id="documentUserPhoto">
+                                                <div class="thumb thumb-slide mb-2">
+                                                    <div id="documentUserPhotoImg">
+                                                        <img src="{{$user->urlPhoto('documentUser')}}" alt="">
+                                                    </div>
+                                                    @can('users_document_edit')
+                                                        <div class="caption">
+                                                            <span>
+                                                                <a href="#" id="documentUserEditPhoto" class="btn btn-success btn-round"><i class="material-icons">edit</i></a>
+                                                            </span>
+                                                        </div>
+                                                    @endcan
+                                                </div>
+                                                <h5>{{__('Document')}}</h5>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 text-center d-none" id="documentUserUpdatePhoto">
+                                                    <div id="document-user-upload-photo-container"></div>
+
+                                                    <input type="file" class="custom-file-input document-user-input" id="documentUserUpload">
+
+                                                    <button class="btn btn-success btn-round mt-2 document-user-upload-result"><i class="material-icons">photo</i> {{__('Update Photo')}}</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="text-center" id="lincenseNumbershowPhoto">
+                                                <div class="thumb thumb-slide mb-2">
+                                                    <div id="lincenseNumberPhotoImg">
+                                                        <img src="{{$user->urlPhoto('lincenseNumber')}}" alt="">
+                                                    </div>
+                                                    @can('users_document_edit')
+                                                        <div class="caption">
+                                                            <span>
+                                                                <a href="#" id="lincenseNumberEditPhoto" class="btn btn-success btn-round"><i class="material-icons">edit</i></a>
+                                                            </span>
+                                                        </div>
+                                                    @endcan
+                                                </div>
+                                                <h5>{{__('License Number')}}</h5>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 text-center d-none" id="lincenseNumberUpdatePhoto">
+                                                    <div id="lincense-number-upload-photo-container"></div>
+
+                                                    <input type="file" class="custom-file-input lincense-number-input" id="lincenseNumberUpload">
+
+                                                    <button class="btn btn-success btn-round mt-2 lincense-number-upload-result"><i class="material-icons">photo</i> {{__('Update Photo')}}</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
                         <div class="form-group row">
                             <div class="col-md-2">{{ __('Created at') }}</div>
                             <div class="col-md-3">
@@ -208,62 +292,165 @@
     </div>
 
     <script type="text/javascript">
-    $.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-    });
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
-    $uploadCrop = $('#upload-photo-container').croppie({
-        url: "{{$user->photo !== null ? url('uploads/avatars/'.$user->photo) : asset('img/placeholder.png')}}",
-        enableExif: true,
-        viewport: {
-            width: 200,
-            height: 200,
-            type: 'circle'
-        },
-        boundary: {
-            width: 250,
-            height: 250
-        }
-    });
+        $uploadCrop = $('#upload-photo-container').croppie({
+            url: "{{$user->photo !== null ? url('uploads/avatars/'.$user->photo) : asset('img/placeholder.png')}}",
+            enableExif: true,
+            viewport: {
+                width: 200,
+                height: 200,
+                type: 'circle'
+            },
+            boundary: {
+                width: 250,
+                height: 250
+            }
+        });
 
-    $('#upload').on('change', function () { 
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            $uploadCrop.croppie('bind', {
-                url: e.target.result
-            }).then(function(){
-                //console.log('jQuery bind complete');
-            });
-        }
-        reader.readAsDataURL(this.files[0]);
-    });
+        $('#upload').on('change', function () { 
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $uploadCrop.croppie('bind', {
+                    url: e.target.result
+                }).then(function(){
+                    //console.log('jQuery bind complete');
+                });
+            }
+            reader.readAsDataURL(this.files[0]);
+        });
 
 
-    $('.upload-result').on('click', function (ev) {
-        $uploadCrop.croppie('result', {
-            type: 'canvas',
-            size: 'viewport'
-        }).then(function (resp) {
-            $.ajax({
-                url: "{{route('users.update_photo', $user->id)}}",
-                type: "POST",
-                data: {"image":resp},
-                success: function (data) {
-                    html = '<img src="' + resp + '" />';
-                    $("#profilePhotoImg").html(html);
-                    $("#showPhoto").show();
-                    $("#updatePhoto").addClass('d-none');
-                }
+        $('.upload-result').on('click', function (ev) {
+            $uploadCrop.croppie('result', {
+                type: 'canvas',
+                size: 'viewport'
+            }).then(function (resp) {
+                $.ajax({
+                    url: "{{route('users.update_photo', $user->id)}}",
+                    type: "POST",
+                    data: {"image":resp},
+                    success: function (data) {
+                        html = '<img src="' + resp + '" />';
+                        $("#profilePhotoImg").html(html);
+                        $("#showPhoto").show();
+                        $("#updatePhoto").addClass('d-none');
+                    }
+                });
             });
         });
-    });
 
-    $("#editPhoto").click(function(){
-        $("#showPhoto").hide();
-        $("#updatePhoto").removeClass('d-none');
-        $("#upload").trigger("click");
-    });
+        $("#editPhoto").click(function(){
+            $("#showPhoto").hide();
+            $("#updatePhoto").removeClass('d-none');
+            $("#upload").trigger("click");
+        });
+
+
+        $documentUserUploadCrop = $('#document-user-upload-photo-container').croppie({
+            url: "{{$user->urlPhoto('documentUser')}}",
+            enableExif: true,
+            viewport: {
+                width: 200,
+                height: 200,
+            },
+            boundary: {
+                width: 250,
+                height: 250
+            }
+        });
+
+        $("#documentUserEditPhoto").click(function(){
+            $("#documentUserPhoto").hide();
+            $("#documentUserUpdatePhoto").removeClass('d-none');
+            $("#documentUserUpload").trigger("click");
+        });
+
+        $('#documentUserUpload').on('change', function () { 
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $documentUserUploadCrop.croppie('bind', {
+                    url: e.target.result
+                }).then(function(){
+                    //console.log('jQuery bind complete');
+                });
+            }
+            reader.readAsDataURL(this.files[0]);
+        });
+
+        $('.document-user-upload-result').on('click', function (ev) {
+            $documentUserUploadCrop.croppie('result', {
+                type: 'canvas',
+                size: 'viewport'
+            }).then(function (resp) {
+                $.ajax({
+                    url: "{{route('user.update_photo', ['name_file' => 'documentUser', 'id' =>$user->id])}}",
+                    type: "POST",
+                    data: {"image":resp},
+                    success: function (data) {
+                        html = '<img src="' + resp + '" />';
+                        $("#documentUserPhotoImg").html(html);
+                        $("#documentUserPhoto").show();
+                        $("#documentUserUpdatePhoto").addClass('d-none');
+                    }
+                });
+            });
+        });
+
+
+        $lincenseNumberUploadCrop = $('#lincense-number-upload-photo-container').croppie({
+            url: "{{$user->urlPhoto('lincenseNumber')}}",
+            enableExif: true,
+            viewport: {
+                width: 200,
+                height: 200,
+            },
+            boundary: {
+                width: 250,
+                height: 250
+            }
+        });
+
+        $("#lincenseNumberEditPhoto").click(function(){
+            $("#lincenseNumbershowPhoto").hide();
+            $("#lincenseNumberUpdatePhoto").removeClass('d-none');
+            $("#lincenseNumberUpload").trigger("click");
+        });
+
+        $('#lincenseNumberUpload').on('change', function () { 
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $lincenseNumberUploadCrop.croppie('bind', {
+                    url: e.target.result
+                }).then(function(){
+                    //console.log('jQuery bind complete');
+                });
+            }
+            reader.readAsDataURL(this.files[0]);
+        });
+
+        $('.lincense-number-upload-result').on('click', function (ev) {
+            $lincenseNumberUploadCrop.croppie('result', {
+                type: 'canvas',
+                size: 'viewport'
+            }).then(function (resp) {
+                $.ajax({
+                    url: "{{route('user.update_photo', ['name_file' => 'lincenseNumber', 'id' =>$user->id])}}",
+                    type: "POST",
+                    data: {"image":resp},
+                    success: function (data) {
+                        html = '<img src="' + resp + '" />';
+                        $("#lincenseNumberPhotoImg").html(html);
+                        $("#lincenseNumbershowPhoto").show();
+                        $("#lincenseNumberUpdatePhoto").addClass('d-none');
+                    }
+                });
+            });
+        });
+
     </script>
 @endsection

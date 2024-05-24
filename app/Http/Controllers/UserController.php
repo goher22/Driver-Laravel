@@ -78,6 +78,8 @@ class UserController extends Controller
         $data = $request->all();
 
         $validator = Validator::make($data, [
+            'document' => ['required', 'string', 'max:255', 'not_regex:/[#$%^&*()+=\-\[\]\';,\/{}|":<>?~\\\\]/'],
+            'license_number' => ['required', 'string', 'max:255', 'not_regex:/[#$%^&*()+=\-\[\]\';,\/{}|":<>?~\\\\]/'],
             'name' => ['required', 'string', 'max:255', 'not_regex:/[#$%^&*()+=\-\[\]\';,\/{}|":<>?~\\\\]/'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -90,6 +92,8 @@ class UserController extends Controller
         $validator->validate();
 
         $user = User::create([
+            'document' => $data['document'],
+            'license_number' => $data['license_number'],
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
@@ -178,6 +182,8 @@ class UserController extends Controller
             }
 
             $validator = Validator::make($data, [
+                'document' => ['required', 'string', 'max:255', 'not_regex:/[#$%^&*()+=\-\[\]\';,\/{}|":<>?~\\\\]/'],
+                'license_number' => ['required', 'string', 'max:255', 'not_regex:/[#$%^&*()+=\-\[\]\';,\/{}|":<>?~\\\\]/'],
                 'name' => ['required', 'string', 'max:255', 'not_regex:/[#$%^&*()+=\-\[\]\';,\/{}|":<>?~\\\\]/'],
                 'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user)],
                 'password' => ['sometimes', 'string', 'min:8', 'confirmed'],

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use App\Vehicle;
+use App\User;
 
 class FileUploadController extends Controller
 {
@@ -43,6 +44,30 @@ class FileUploadController extends Controller
                 return response()->json(['success' => 'done']);
             }else {
                 return response()->json(['error' => __("Vehicle not found!")]);
+            }
+        }catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred while updating the photo.', 'message' => $e->getMessage()], 500);
+        }
+
+    }
+
+    public function updateFileUser(Request $request, $name_file, $id){
+        try{
+            $user = User::find($id);
+            if ($user) {
+                $data = $request->image;
+
+                $name_file = $name_file. '_' . $user->id . '.png';
+
+                $this->updateFile(
+                    $data, 
+                    storage_path('app/user/'), 
+                    $name_file
+                );
+
+                return response()->json(['success' => 'done']);
+            }else {
+                return response()->json(['error' => __("User not found!")]);
             }
         }catch (\Exception $e) {
             return response()->json(['error' => 'An error occurred while updating the photo.', 'message' => $e->getMessage()], 500);

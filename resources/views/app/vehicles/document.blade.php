@@ -74,14 +74,13 @@
                                                     <div id="expensiveInsurancePhotoImg">
                                                         <img src="{{$vehicle->urlPhoto('expensiveInsurance')}}" alt="">
                                                     </div>
-                                                    <div class="caption">
-                                                        <span>
-                                                            <a href="#" id="expensiveInsuranceEditPhoto" class="btn btn-success btn-round"><i class="material-icons">edit</i></a>
-                                                            @if($user->photo !== null)
-                                                                <a href="{{route('users.delete_photo', $user->id)}}" class="btn btn-danger btn-round confirmBtn" data-confirm-message="{{__('Are you sure you want to delete user profile photo?')}}"><i class="material-icons md-18">delete</i></a>
-                                                            @endif
-                                                        </span>
-                                                    </div>
+                                                    @can('vehicles_document_edit')
+                                                        <div class="caption">
+                                                            <span>
+                                                                <a href="#" id="expensiveInsuranceEditPhoto" class="btn btn-success btn-round"><i class="material-icons">edit</i></a>
+                                                            </span>
+                                                        </div>
+                                                    @endcan
                                                 </div>
                                                 <h5>{{__('Expensive Insurance')}}</h5>
                                             </div>
@@ -106,14 +105,13 @@
                                                     <div id="titleOfTheCarsPhotoImg">
                                                         <img src="{{$vehicle->urlPhoto('titleOfTheCar')}}" alt="">
                                                     </div>
-                                                    <div class="caption">
-                                                        <span>
-                                                            <a href="#" id="titleOfTheCarsEditPhoto" class="btn btn-success btn-round"><i class="material-icons">edit</i></a>
-                                                            @if($user->photo !== null)
-                                                                <a href="{{route('users.delete_photo', $user->id)}}" class="btn btn-danger btn-round confirmBtn" data-confirm-message="{{__('Are you sure you want to delete user profile photo?')}}"><i class="material-icons md-18">delete</i></a>
-                                                            @endif
-                                                        </span>
-                                                    </div>
+                                                    @can('vehicles_document_edit')
+                                                        <div class="caption">
+                                                            <span>
+                                                                <a href="#" id="titleOfTheCarsEditPhoto" class="btn btn-success btn-round"><i class="material-icons">edit</i></a>
+                                                            </span>
+                                                        </div>
+                                                    @endcan
                                                 </div>
                                                 <h5>{{__('Title Of The Car')}}</h5>
                                             </div>

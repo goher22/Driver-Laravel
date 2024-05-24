@@ -39,12 +39,15 @@ class UserRoleSeeder extends Seeder
             ['name' => 'users_delete', 'display_name' => 'Delete', 'group_name' => 'Users', 'group_slug' => 'users', 'guard_name' => 'web'],
             ['name' => 'users_ban', 'display_name' => 'Ban/Activate User', 'group_name' => 'Users', 'group_slug' => 'users', 'guard_name' => 'web'],
             ['name' => 'users_activity', 'display_name' => 'Activity Log', 'group_name' => 'Users', 'group_slug' => 'users', 'guard_name' => 'web'],
+            ['name' => 'users_document_show', 'display_name' => 'Document Show', 'group_name' => 'Users', 'group_slug' => 'users', 'guard_name' => 'web'],
+            ['name' => 'users_document_edit', 'display_name' => 'Document Edit', 'group_name' => 'Users', 'group_slug' => 'users', 'guard_name' => 'web'],
 
             ['name' => 'vehicles_access', 'display_name' => 'Access', 'group_name' => 'Vehicles', 'group_slug' => 'vehicles', 'guard_name' => 'web'],
             ['name' => 'vehicles_create', 'display_name' => 'Create', 'group_name' => 'Vehicles', 'group_slug' => 'vehicles', 'guard_name' => 'web'],
             ['name' => 'vehicles_show', 'display_name' => 'Show', 'group_name' => 'Vehicles', 'group_slug' => 'vehicles', 'guard_name' => 'web'],
             ['name' => 'vehicles_edit', 'display_name' => 'Edit', 'group_name' => 'Vehicles', 'group_slug' => 'vehicles', 'guard_name' => 'web'],
             ['name' => 'vehicles_delete', 'display_name' => 'Delete', 'group_name' => 'Vehicles', 'group_slug' => 'vehicles', 'guard_name' => 'web'],
+            ['name' => 'vehicles_document_edit', 'display_name' => 'Document Edit', 'group_name' => 'Vehicles', 'group_slug' => 'vehicles', 'guard_name' => 'web'],
 
             ['name' => 'document_show', 'display_name' => 'Show', 'group_name' => 'Document', 'group_slug' => 'document', 'guard_name' => 'web'],
             ['name' => 'document_update', 'display_name' => 'Update', 'group_name' => 'Document', 'group_slug' => 'document', 'guard_name' => 'web'],
@@ -91,7 +94,7 @@ class UserRoleSeeder extends Seeder
                 'users_activity', 
                 'roles_delete', 
                 'permissions_delete', 
-                'activitylog_delete'
+                'activitylog_delete',
             ];
             if(!in_array($item->name, $restrictedPerms)){
                 return [$item->name];
@@ -111,7 +114,11 @@ class UserRoleSeeder extends Seeder
                 'vehicles_create',
                 'vehicles_show',
                 'vehicles_edit',
-                'vehicles_delete'
+                'vehicles_delete',
+                'document_show',
+                'users_document_show',
+                'users_document_edit',
+                'vehicles_document_edit'
             ];
             if(in_array($item->name, $restrictedPerms)){
                 return [$item->name];

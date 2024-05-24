@@ -60,4 +60,28 @@ class AvatarController extends Controller
 
         return $response;
     }
+
+
+    public function showUser($file_path){
+    	$path = storage_path() . '/app/user/' . $file_path;
+        
+        $finfo = finfo_open(FILEINFO_MIME_TYPE); 
+        $mime = finfo_file($finfo, $path); 
+
+        $file = File::get($path);
+
+        $response = Response::make($file, 200);
+
+        $file_ext = File::extension($path);
+        if($file_ext == "xls" || $file_ext == "xlsx"){
+            $response->header('Content-Disposition', 'attachment; filename="'.basename($path).'"');
+        }
+        if($file_ext == "doc" || $file_ext == "docx"){
+            $response->header('Content-Disposition', 'attachment; filename="'.basename($path).'"');
+        }
+
+        $response->header("Content-Type", $mime);
+
+        return $response;
+    }
 }
