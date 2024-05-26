@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use App\Vehicle;
 use App\User;
+use App\Payment;
 
 class FileUploadController extends Controller
 {
@@ -49,6 +50,29 @@ class FileUploadController extends Controller
             return response()->json(['error' => 'An error occurred while updating the photo.', 'message' => $e->getMessage()], 500);
         }
 
+    }
+
+    public function updateFilePayment(Request $request, $name_file, $id){
+        try{
+            $Payment = Payment::find($id);
+            if($Payment){
+                $data = $request->image;
+
+                $name_file = $name_file. '_' . $Payment->id . '.png';
+
+                $this->updateFile(
+                    $data, 
+                    storage_path('app/vehicles/'), 
+                    $name_file
+                );
+
+                return response()->json(['success' => 'done']);
+            }else {
+                return response()->json(['error' => __("Payment not found!")]);
+            }
+        }catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred while updating the photo.', 'message' => $e->getMessage()], 500);
+        }
     }
 
     public function updateFileUser(Request $request, $name_file, $id){

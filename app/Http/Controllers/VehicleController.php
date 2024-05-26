@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Vehicle;
 use App\User;
 use App\Role;
+use App\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -232,6 +233,102 @@ class VehicleController extends Controller
         return view('app.vehicles.document', ['user' => $user, 'vehicle' => $vehicle,'images' => $images]);
     }
 
+    public function showPayment(Request $request, $id)
+    {
+        $user = Auth::user();
+
+        $vehicle = Vehicle::find($id);
+
+        $payments = $vehicle->payments;
+        
+        return view(
+            'app.vehicles.payments', 
+            [
+                'user' => $user,
+                'vehicle' => $vehicle,
+                'payments' => $payments
+            ]
+        );
+    }
+
+    public function createPayment(Request $request, $id){
+        $vehicle = Vehicle::find($id);
+        return view('app.vehicles.payment_create', [
+            'vehicle' => $vehicle
+        ]);
+    }
+
+    public function viewPayment(Request $request, $id, $id_payment){
+        $user = Auth::user();
+        $vehicle = Vehicle::find($id);
+        $payment = Payment::find($id_payment);
+        return view('app.vehicles.payment_show', [
+            'user' => $user,
+            'vehicle' => $vehicle,
+            'payment' => $payment
+        ]);
+    }
+
+    public function storePayment(Request $request, $id) {
+        try {
+
+            $data = $request->all();
+            $vehicle = Vehicle::find($id);
+        
+            if ($vehicle) {
+                $validator = Validator::make($data, [
+                    'amount' => 'required|numeric',
+                    'payment_method' => 'required|string',
+                    'payment_date' => 'required|date'
+                ]);
+        
+                if ($validator->fails()) {
+                    return redirect()->back()->withErrors($validator)->withInput();
+                }
+        
+                $payment = Payment::create([
+                    'vehicle_id' => $id,
+                    'amount' => $data['amount'],
+                    'payment_method' => $data['payment_method'],
+                    'payment_date' => $data['payment_date'],
+                ]);
+        
+                return redirect('vehicles/'.$id.'/payments')->with('success', __("Payment created!"));
+            } else {
+                return redirect('vehicles/'.$id.'/create_payments')->with('error', __("There has been an error!"));
+            }
+
+        }catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred while updating the photo.', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function updateApproved ($id){
+
+        $user = Auth::user();
+
+        if(!$user->isSuperAdmin()){
+            return redirect('vehicles')->with('error',__("Super admin user cannot be deleted!"));
+        }
+
+        $payment = Payment::find($id);
+
+        if ($payment) {
+
+            $payment->status = "Approved";
+
+            if($payment->save()){
+                return redirect('vehicles/'.$payment->vehicle_id.'payments'.$payment->id)->with('success',__("Payment updated!"));
+            }else {
+                return redirect('vehicles/'.$payment->vehicle_id.'payments'.$payment->id)->with('error', __("Failed to update Payment status!"));
+            }
+
+        }else{
+            return response()->json(['error' => __("Payment not found!")]);
+        }
+
+    }
+
     private function showFileVehicle($id, $search){
         $images = File::files(storage_path('app/vehicles/'));
 
@@ -255,5 +352,6 @@ class VehicleController extends Controller
         return $imageFiles;
 
     }
+
 
 }

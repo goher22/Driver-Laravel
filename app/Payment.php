@@ -6,20 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
 
-class Vehicle extends Model
+class Payment extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'make',
-        'model',
-        'year',
-        'license_plate',
-        'status',
+        'vehicle_id',
+        'amount',
+        'payment_method',
+        'payment_date',
+        'status'
     ];
 
-    private function validationPhoto($name_file) {
+
+    public function validationPhoto($name_file) {
 
         $directory = storage_path('app/vehicles/');
         $image_name = $name_file.'_' . $this->id . '.png';
@@ -43,17 +43,7 @@ class Vehicle extends Model
         return $this->validationPhoto($name_file) ? url($photoPath) : asset('img/placeholder.png');
     }
 
-    public function isStatus() {
-        return $this->status == 1 ? true : false;
+    public function vehicle(){
+        return $this->belongsTo(Vehicle::class);
     }
-
-    public function user(){
-        return $this->belongsTo(User::class);
-    }
-
-    public function payments()
-    {
-        return $this->hasMany('App\Payment', 'vehicle_id');
-    }
-
 }

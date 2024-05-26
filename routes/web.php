@@ -53,13 +53,19 @@ Route::middleware($middlewares)->group(function(){
 
 	Route::group(['middleware' => ['permission:vehicles_access']], function () {
 		Route::resources(['vehicles' => 'VehicleController']);
-		Route::get('vehicles/{id}/documents', 'VehicleController@showDocument')->name('vehicles.show_document');
 		Route::put('vehicles/status/{id}', 'VehicleController@updateStatus')->name('vehicles.status');
+		Route::get('vehicles/{id}/documents', 'VehicleController@showDocument')->name('vehicles.show_document');
+		Route::get('vehicles/{id}/payments', 'VehicleController@showPayment')->name('vehicles.show_payments');
+		Route::get('vehicles/{id}/payments/{id_payment}', 'VehicleController@viewPayment')->name('vehicles.view_payments');
+		Route::get('payment/{id}/create_payments', 'VehicleController@createPayment')->name('vehicles.create_payments');
+		Route::post('payment/{id}/create_payments', 'VehicleController@storePayment')->name('vehicles.save_payments');
+		Route::put('payment/status/{id}', 'VehicleController@updateApproved')->name('vehicles.status_payment');
 	});
 
 	Route::group(['middleware' => ['permission:document_update']], function () {
 		Route::post('upload/vehicle/{name_file}/{id}', 'FileUploadController@updateFileVehicle')->name('vehicles.update_photo');
 		Route::post('upload/user/{name_file}/{id}', 'FileUploadController@updateFileUser')->name('user.update_photo');
+		Route::post('upload/payment/{name_file}/{id}', 'FileUploadController@updateFilePayment')->name('payment.update_photo');
 	});
 
 	Route::group(['middleware' => ['permission:activitylog_access']], function () {
