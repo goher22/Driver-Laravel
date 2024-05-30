@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+    mysql_db:
+        image: mysql
+        restart: always
+        container_name: db_mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: DriveHub
+        ports:
+            - "3307:3306"
+        volumes:
+            - ./createdb.sql:/docker-entrypoint-initdb.d/createdb.sql
+            - mysql_data:/data/db
+        networks:
+            - laravel_network
+networks:
+    laravel_network:
+volumes:
+    mysql_data:
