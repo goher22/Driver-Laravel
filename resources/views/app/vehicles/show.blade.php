@@ -108,6 +108,15 @@
                             @endif
                         </div>
                     </div>
+
+                    @if($user->isSuperAdmin())
+                        <div class="form-group row">
+                            <div class="col-md-2">{{ __('Device Id') }}</div>
+                            <div class="col-md-3">
+                                <span>{{ $vehicle->id_device ?? 'N/A' }}</span>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

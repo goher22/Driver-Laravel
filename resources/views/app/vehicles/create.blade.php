@@ -91,6 +91,20 @@
                         </div>
                     </div>
 
+
+                    <div class="form-group row">
+                        <div class="col-md-2">{{ __('Id Device') }}</div>
+                        <div class="col-md-8">
+                            <input id="idDevice" type="text" class="form-control{{ $errors->has('idDevice') ? ' is-invalid' : '' }}" name="idDevice" value="{{ old('idDevice') }}">
+
+                            @if ($errors->has('idDevice'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('idDevice') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+
                     <div class="form-group row mb-0">
                         <div class="col-md-2"></div>
                         <div class="col-md-8">

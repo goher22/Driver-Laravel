@@ -16,6 +16,7 @@ class Vehicle extends Model
         'model',
         'year',
         'license_plate',
+        'id_device',
         'status',
     ];
 

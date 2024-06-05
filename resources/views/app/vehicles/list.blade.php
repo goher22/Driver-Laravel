@@ -87,6 +87,9 @@
                                 <th>{{ __('Model') }}</th>
                                 <th>{{ __('Year') }}</th>
                                 <th>{{ __('License Plate') }}</th>
+                                @if($user->isSuperAdmin())
+                                    <th>{{ __('Device Id') }}</th>
+                                @endif
                                 <th>{{ __('Status') }}</th>
                             </tr>
                         </thead>
@@ -134,6 +137,9 @@
                                         <td>{{ $vehicle->model }}</td>
                                         <td>{{ $vehicle->year }}</td>
                                         <td>{{ $vehicle->license_plate }}</td>
+                                        @if($user->isSuperAdmin())
+                                            <td>{{ $vehicle->id_device ?? 'N/A' }}</td>
+                                        @endif
                                         <td>
                                             @if($vehicle->isStatus())
                                                 <span class="badge badge-lg badge-success text-white">{{__('Active')}}</span>

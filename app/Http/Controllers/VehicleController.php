@@ -70,7 +70,7 @@ class VehicleController extends Controller
             'model' => ['required', 'string', 'max:255', 'not_regex:/[#$%^&*()+=\-\[\]\';,\/{}|":<>?~\\\\]/'],
             'year' => ['required', 'integer',],
             'licensePlate' => ['required', 'string', 'max:255', 'not_regex:/[#$%^&*()+=\-\[\]\';,\/{}|":<>?~\\\\]/'],
-            'driver_id' => ['required', 'integer', 'not_in:0'],
+            'driver_id' => ['required', 'integer', 'not_in:0']
         ]);
 
         $validator->validate();
@@ -84,7 +84,8 @@ class VehicleController extends Controller
             'make' => $data['make'],
             'model' => $data['model'],
             'year' => $data['year'],
-            'license_plate' => $data['licensePlate']
+            'license_plate' => $data['licensePlate'],
+            'id_device' => !empty($data['id_device']) ? $data['id_device'] : null
         ]);
 
         if($vehicle) {
@@ -151,7 +152,7 @@ class VehicleController extends Controller
                 'model' => ['required', 'string', 'max:255', 'not_regex:/[#$%^&*()+=\-\[\]\';,\/{}|":<>?~\\\\]/'],
                 'year' => ['required', 'integer',],
                 'licensePlate' => ['required', 'string', 'max:255', 'not_regex:/[#$%^&*()+=\-\[\]\';,\/{}|":<>?~\\\\]/'],
-                'driver_id' => ['required', 'integer', 'not_in:0'],
+                'driver_id' => ['required', 'integer', 'not_in:0']
             ]);
     
             $validator->validate();
@@ -159,6 +160,8 @@ class VehicleController extends Controller
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
+
+            $data['id_device'] = !empty($data['id_device']) ? $data['id_device'] : null;
 
             if($vehicle->update($data)){
                 return redirect('vehicles/'.$id)->with('success',__("vehicle updated!"));
@@ -330,7 +333,14 @@ class VehicleController extends Controller
     }
 
     private function showFileVehicle($id, $search){
-        $images = File::files(storage_path('app/vehicles/'));
+
+        $directoryPath = storage_path('app/vehicles/');
+
+        if (!File::exists($directoryPath)) {
+            File::makeDirectory($directoryPath, 0755, true);
+        }
+
+        $images = File::files($directoryPath);
 
         $imageFiles = array_filter($images, function ($file) use ($search, $id) {
 
