@@ -160,9 +160,8 @@ class VehicleController extends Controller
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-
-            $data['id_device'] = !empty($data['id_device']) ? $data['id_device'] : null;
-
+            $data['id_device'] = !empty($data['idDevice']) ? $data['idDevice'] : null;
+            $data['license_plate'] = $data['licensePlate'];
             if($vehicle->update($data)){
                 return redirect('vehicles/'.$id)->with('success',__("vehicle updated!"));
             } else {

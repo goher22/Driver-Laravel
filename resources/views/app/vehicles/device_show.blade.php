@@ -55,5 +55,53 @@
             </div>
         </div>
     </div>
+
+    <div class="content">
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
+    </div>
+
+    <div class="content">
+        @if($vehicle->id_device == null)
+            <div>
+                {{ __('Device registration required') }}
+            </div>
+        @else
+            <div>
+                {{ __('Invalid device') }}
+            </div>
+            <div id="map" style="height: 400px; width: 100%;"></div>
+        @endif
+    </div>
 </div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+<script>
+    function initMap() {
+        var vehicleLocation = { lat: -34.397, lng: 150.644 }; // Usa las coordenadas reales del vehículo si están disponibles
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 8,
+            center: vehicleLocation
+        });
+        var marker = new google.maps.Marker({
+            position: vehicleLocation,
+            map: map
+        });
+    }
+    window.addEventListener('load', function() {
+        if (typeof google === 'object' && typeof google.maps === 'object') {
+            initMap();
+        }
+    });
+</script>
+
 @endsection
