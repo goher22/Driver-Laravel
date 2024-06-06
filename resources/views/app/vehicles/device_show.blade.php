@@ -77,14 +77,14 @@
             </div>
         @else
             <div>
-                {{ __('Invalid device') }}
+                {{ __('Invalid id device') }}
             </div>
             <div id="map" style="height: 400px; width: 100%;"></div>
         @endif
     </div>
 </div>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrEZitMafKrjugDJ48hnjDSua8qaYo6EQ&callback=initMap" async defer></script>
 <script>
     function initMap() {
         var vehicleLocation = { lat: -34.397, lng: 150.644 }; // Usa las coordenadas reales del vehículo si están disponibles
