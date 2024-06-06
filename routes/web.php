@@ -29,7 +29,7 @@ if(setting('auth.email_verification')){
 }
 
 Route::middleware($middlewares)->group(function(){
-	Route::get('dashboard', 'HomeController@dashboard')->name('dashboard');
+	Route::get('dashboard', 'DashboardController@dashboard')->name('dashboard');
 
 	Route::get('account', 'UserAccountController@index')->name('account.index');
 	Route::get('account/edit', 'UserAccountController@edit')->name('account.edit');
@@ -55,6 +55,7 @@ Route::middleware($middlewares)->group(function(){
 		Route::resources(['vehicles' => 'VehicleController']);
 		Route::put('vehicles/status/{id}', 'VehicleController@updateStatus')->name('vehicles.status');
 		Route::get('vehicles/{id}/documents', 'VehicleController@showDocument')->name('vehicles.show_document');
+		Route::get('vehicles/{id}/device', 'VehicleController@showDevice')->name('vehicles.show_device');
 		Route::get('vehicles/{id}/payments', 'VehicleController@showPayment')->name('vehicles.show_payments');
 		Route::get('vehicles/{id}/payments/{id_payment}', 'VehicleController@viewPayment')->name('vehicles.view_payments');
 		Route::get('payment/{id}/create_payments', 'VehicleController@createPayment')->name('vehicles.create_payments');

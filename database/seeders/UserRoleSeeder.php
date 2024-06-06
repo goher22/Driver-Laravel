@@ -52,6 +52,8 @@ class UserRoleSeeder extends Seeder
             ['name' => 'document_show', 'display_name' => 'Show', 'group_name' => 'Document', 'group_slug' => 'document', 'guard_name' => 'web'],
             ['name' => 'document_update', 'display_name' => 'Update', 'group_name' => 'Document', 'group_slug' => 'document', 'guard_name' => 'web'],
 
+            ['name' => 'device_show', 'device_name' => 'Show', 'group_name' => 'Device', 'group_slug' => 'device', 'guard_name' => 'web'],
+
             ['name' => 'payment_show', 'display_name' => 'Show', 'group_name' => 'Payment', 'group_slug' => 'payment', 'guard_name' => 'web'],
             ['name' => 'payment_create', 'display_name' => 'Create', 'group_name' => 'Payment', 'group_slug' => 'payment', 'guard_name' => 'web'],
             ['name' => 'payment_approve', 'display_name' => 'Approve', 'group_name' => 'Payment', 'group_slug' => 'payment', 'guard_name' => 'web'],
@@ -123,7 +125,10 @@ class UserRoleSeeder extends Seeder
                 'users_document_show',
                 'users_document_edit',
                 'vehicles_document_edit',
-                'payment_show'
+                'payment_show',
+                'payment_create',
+                'device_show'
+
             ];
             if(in_array($item->name, $restrictedPerms)){
                 return [$item->name];

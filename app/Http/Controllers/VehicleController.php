@@ -332,6 +332,15 @@ class VehicleController extends Controller
 
     }
 
+    public function showDevice(Request $request, $id){
+        $user = Auth::user();
+        $vehicle = Vehicle::find($id);
+        return view('app.vehicles.device_show', [
+            'user' => $user,
+            'vehicle' => $vehicle
+        ]);
+    }
+
     private function showFileVehicle($id, $search){
 
         $directoryPath = storage_path('app/vehicles/');

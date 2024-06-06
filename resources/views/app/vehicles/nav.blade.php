@@ -12,4 +12,9 @@
             <a class="nav-link @if(Route::getCurrentRoute()->getName() == 'vehicles.show_payments') active @endif" href="{{route('vehicles.show_payments', $vehicle->id)}}">{{__('Payment History')}}</a>
         </li>
     @endcan
+    @can('device_show')
+        <li class="nav-item">
+            <a class="nav-link @if(Route::getCurrentRoute()->getName() == 'vehicles.show_device') active @endif" href="{{route('vehicles.show_device', $vehicle->id)}}">{{__('Device')}}</a>
+        </li>
+    @endcan
 </ul>

@@ -44,7 +44,7 @@ class TwoFactorController extends Controller
         $verfiy = $authy->verifyToken($user->authy_id, $request->get('authy_token'));
         if($verfiy->ok()){
             Auth::login($user);
-            return redirect('/');
+            return redirect('/dashboard');
         } else {
             return redirect('token')->with('message', __('The token you entered is incorrect'));
         }

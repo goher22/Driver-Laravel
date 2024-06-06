@@ -44,4 +44,8 @@ return [
         ],
     ],
 
+    'flespi' => [
+        'token' => env('FLESPI_TOKEN'),
+    ],
+
 ];
