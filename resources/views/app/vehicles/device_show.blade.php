@@ -85,23 +85,29 @@
 </div>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrEZitMafKrjugDJ48hnjDSua8qaYo6EQ&callback=initMap" async defer></script>
-<script>
-    function initMap() {
-        var vehicleLocation = { lat: -34.397, lng: 150.644 }; // Usa las coordenadas reales del vehículo si están disponibles
-        var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 8,
-            center: vehicleLocation
-        });
-        var marker = new google.maps.Marker({
-            position: vehicleLocation,
-            map: map
-        });
-    }
-    window.addEventListener('load', function() {
-        if (typeof google === 'object' && typeof google.maps === 'object') {
-            initMap();
+    <script>
+        function initMap() {
+            // Coordenadas de Panamá
+            var panamaLocation = { lat: 8.538, lng: -80.782 };
+            
+            // Crear el mapa centrado en Panamá
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 8, // Ajusta el nivel de zoom según sea necesario
+                center: panamaLocation
+            });
+            
+            // Colocar un marcador en Panamá
+            var marker = new google.maps.Marker({
+                position: panamaLocation,
+                map: map
+            });
         }
-    });
-</script>
+
+        window.addEventListener('load', function() {
+            if (typeof google === 'object' && typeof google.maps === 'object') {
+                initMap();
+            }
+        });
+    </script>
 
 @endsection

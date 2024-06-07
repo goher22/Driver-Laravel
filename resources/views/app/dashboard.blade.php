@@ -106,6 +106,35 @@
             </div>
         </div>
     </div>
+
+    <div id="map" style="height: 400px; width: 100%;"></div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrEZitMafKrjugDJ48hnjDSua8qaYo6EQ&callback=initMap" async defer></script>
+    <script>
+        function initMap() {
+            // Coordenadas de la Ciudad de Panamá
+            var panamaCityLocation = { lat: 8.9833, lng: -79.5167 };
+            
+            // Crear el mapa centrado en la Ciudad de Panamá
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 12, // Ajusta el nivel de zoom según sea necesario
+                center: panamaCityLocation
+            });
+            
+            // Colocar un marcador en la Ciudad de Panamá
+            var marker = new google.maps.Marker({
+                position: panamaCityLocation,
+                map: map
+            });
+        }
+
+        window.addEventListener('load', function() {
+            if (typeof google === 'object' && typeof google.maps === 'object') {
+                initMap();
+            }
+        });
+    </script>
+    
     <script>
         var ctx = document.getElementById('myChart');
         var myChart = new Chart(ctx, {

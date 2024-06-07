@@ -12,6 +12,7 @@ use App\Elmas\Tools\AuditMessages;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 
 class UserController extends Controller
 {
@@ -352,6 +353,12 @@ class UserController extends Controller
 
             list($type, $data) = explode(';', $data);
             list(, $data)      = explode(',', $data);
+
+            $directoryPath = storage_path('app/avatars/');
+
+            if (!File::exists($directoryPath)) {
+                File::makeDirectory($directoryPath, 0755, true);
+            }
 
             $data = base64_decode($data);
             $image_name = time().'.png';

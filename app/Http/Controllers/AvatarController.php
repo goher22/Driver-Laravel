@@ -16,6 +16,13 @@ class AvatarController extends Controller
      * @return Illuminate\Http\Response
      */
     public function showAvatar($file_path){
+
+        $directoryPath = storage_path('app/avatars/');
+
+        if (!File::exists($directoryPath)) {
+            File::makeDirectory($directoryPath, 0755, true);
+        }
+
     	$path = storage_path() . '/app/avatars/' . $file_path;
         
         $finfo = finfo_open(FILEINFO_MIME_TYPE); 
