@@ -118,31 +118,37 @@
                         <div class="form-group row">
                             <div class="col-md-2 mb-3">{{ __('Documents') }}</div>
                             <div class="col-md-12 row">
-                                <div class="col-md-3">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="text-center" id="documentUserPhoto">
-                                                <div class="thumb thumb-slide mb-2">
-                                                    <div id="documentUserPhotoImg">
-                                                        <img src="{{$user->urlPhoto('documentUser')}}" alt="">
-                                                    </div>
-                                                    @can('users_document_edit')
-                                                        <div class="caption">
-                                                            <span>
-                                                                <a href="#" id="documentUserEditPhoto" class="btn btn-success btn-round"><i class="material-icons">edit</i></a>
-                                                            </span>
-                                                        </div>
-                                                    @endcan
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="text-center" id="documentUserPhoto">
+                                            <div class="thumb thumb-slide mb-2">
+                                                <div id="documentUserPhotoImg">
+                                                    <img src="{{$user->urlPhoto('documentUser')}}" alt="">
                                                 </div>
-                                                <h5>{{__('Document')}}</h5>
+                                                @can('users_document_edit')
+                                                    <div class="caption">
+                                                        <span>
+                                                            <a href="#" id="documentUserEditPhoto" class="btn btn-success btn-round">
+                                                                <i class="material-icons">edit</i>
+                                                            </a>
+                                                        </span>
+                                                    </div>
+                                                @endcan
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-12 text-center d-none" id="documentUserUpdatePhoto">
-                                                    <div id="document-user-upload-photo-container"></div>
+                                            <h5>{{__('Document')}}</h5>
+                                        </div>
+                                        <div class="row"> 
+                                            <div class="col-md-12 text-center d-none" id="documentUserUpdatePhoto">
+                                                    <div class="thumb thumb-slide mb-2">
+                                                        <div id="document-user-upload-photo-container"></div>
+                                                    </div>
 
                                                     <input type="file" class="custom-file-input document-user-input" id="documentUserUpload">
 
-                                                    <button class="btn btn-success btn-round mt-2 document-user-upload-result"><i class="material-icons">photo</i> {{__('Update Photo')}}</button>
+                                                    <button class="btn btn-success btn-round mt-2 document-user-upload-result">
+                                                        <i class="material-icons">photo</i> {{__('Update Photo')}}
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -169,7 +175,9 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12 text-center d-none" id="lincenseNumberUpdatePhoto">
-                                                    <div id="lincense-number-upload-photo-container"></div>
+                                                    <div class="thumb thumb-slide mb-2">
+                                                        <div id="lincense-number-upload-photo-container"></div>
+                                                    </div>
 
                                                     <input type="file" class="custom-file-input lincense-number-input" id="lincenseNumberUpload">
 
@@ -290,6 +298,8 @@
             </div>
         </div>
     </div>
+</div>
+
 
     <script type="text/javascript">
         $.ajaxSetup({
@@ -351,19 +361,6 @@
         });
 
 
-        $documentUserUploadCrop = $('#document-user-upload-photo-container').croppie({
-            url: "{{$user->urlPhoto('documentUser')}}",
-            enableExif: true,
-            viewport: {
-                width: 200,
-                height: 200,
-            },
-            boundary: {
-                width: 250,
-                height: 250
-            }
-        });
-
         $("#documentUserEditPhoto").click(function(){
             $("#documentUserPhoto").hide();
             $("#documentUserUpdatePhoto").removeClass('d-none');
@@ -373,32 +370,40 @@
         $('#documentUserUpload').on('change', function () { 
             var reader = new FileReader();
             reader.onload = function (e) {
-                $documentUserUploadCrop.croppie('bind', {
-                    url: e.target.result
-                }).then(function(){
-                    //console.log('jQuery bind complete');
-                });
+                var imgHtml = '<img src="' + e.target.result + '" />';
+                $("#document-user-upload-photo-container").html(imgHtml);
             }
             reader.readAsDataURL(this.files[0]);
         });
 
         $('.document-user-upload-result').on('click', function (ev) {
-            $documentUserUploadCrop.croppie('result', {
-                type: 'canvas',
-                size: 'viewport'
-            }).then(function (resp) {
+            var formData = new FormData();
+            var fileInput = document.getElementById('documentUserUpload');
+            var file = fileInput.files[0];
+            
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                formData.append('image', event.target.result);
+
                 $.ajax({
                     url: "{{route('user.update_photo', ['name_file' => 'documentUser', 'id' =>$user->id])}}",
                     type: "POST",
-                    data: {"image":resp},
+                    data: formData,
+                    processData: false,
+                    contentType: false,
                     success: function (data) {
-                        html = '<img src="' + resp + '" />';
-                        $("#documentUserPhotoImg").html(html);
+                        var imgHtml = '<img src="' + event.target.result + '" />';
+                        $("#documentUserPhotoImg").html(imgHtml);
                         $("#documentUserPhoto").show();
                         $("#documentUserUpdatePhoto").addClass('d-none');
                     }
                 });
-            });
+
+            };
+
+            reader.readAsDataURL(file);
+
+
         });
 
 
