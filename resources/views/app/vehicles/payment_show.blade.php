@@ -140,7 +140,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="text-center" id="voucherPhoto">
-                            <div class="thumb thumb-rounded thumb-slide mb-2">
+                            <div class="thumb thumb-slide mb-2">
                                 <div id="voucherPhotoImg">
                                     <img src="{{$payment->urlPhoto('voucher')}}" alt="">
                                 </div>
@@ -264,19 +264,6 @@
             }
         });
 
-        $voucherUploadCrop = $('#voucher-upload-photo-container').croppie({
-            url: "{{$vehicle->urlPhoto('voucher')}}",
-            enableExif: true,
-            viewport: {
-                width: 200,
-                height: 200,
-            },
-            boundary: {
-                width: 250,
-                height: 250
-            }
-        });
-
         $("#voucherEditPhoto").click(function(){
             $("#voucherPhoto").hide();
             $("#voucherUpdatePhoto").removeClass('d-none');
@@ -286,16 +273,33 @@
         $('#voucherUpload').on('change', function () { 
             var reader = new FileReader();
             reader.onload = function (e) {
-                $voucherUploadCrop.croppie('bind', {
-                    url: e.target.result
-                }).then(function(){
-                    //console.log('jQuery bind complete');
-                });
+                var imgHtml = '<img src="' + e.target.result + '" />';
+                $("#voucher-upload-photo-container").html(imgHtml);
             }
-            reader.readAsDataURL(this.files[0]);
+            reader.readAsDataURL(this.files[0])
         });
 
         $('.voucher-upload-result').on('click', function (ev) {
+            var formData = new FormData();
+            var fileInput = document.getElementById('voucherUpload');
+            var file = fileInput.files[0];
+            
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                formData.append('image', event.target.result);
+                $.ajax({
+                    url: "{{route('payment.update_photo', ['name_file' => 'voucher', 'id' =>$payment->id])}}",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        location.reload();
+                    }
+                });
+            };
+            reader.readAsDataURL(file)
+
             $voucherUploadCrop.croppie('result', {
                 type: 'canvas',
                 size: 'viewport'
@@ -305,7 +309,9 @@
                     type: "POST",
                     data: {"image":resp},
                     success: function (data) {
-                        location.reload();
+                        $("#voucherPhotoImg").html(html);
+                        $("#voucherPhoto").show();
+                        $("#voucherUpdatePhoto").addClass('d-none');
                     }
                 });
             });
