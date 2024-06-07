@@ -118,77 +118,78 @@
                         <div class="form-group row">
                             <div class="col-md-2 mb-3">{{ __('Documents') }}</div>
                             <div class="col-md-12 row">
-                            <div class="col-md-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="text-center" id="documentUserPhoto">
-                                            <div class="thumb thumb-slide mb-2">
-                                                <div id="documentUserPhotoImg">
-                                                    <img src="{{$user->urlPhoto('documentUser')}}" alt="">
-                                                </div>
-                                                @can('users_document_edit')
-                                                    <div class="caption">
-                                                        <span>
-                                                            <a href="#" id="documentUserEditPhoto" class="btn btn-success btn-round">
-                                                                <i class="material-icons">edit</i>
-                                                            </a>
-                                                        </span>
-                                                    </div>
-                                                @endcan
-                                            </div>
-                                            <h5>{{__('Document')}}</h5>
-                                        </div>
-                                        <div class="row"> 
-                                            <div class="col-md-12 text-center d-none" id="documentUserUpdatePhoto">
-                                                    <div class="thumb thumb-slide mb-2">
-                                                        <div id="document-user-upload-photo-container"></div>
-                                                    </div>
-
-                                                    <input type="file" class="custom-file-input document-user-input" id="documentUserUpload">
-
-                                                    <button class="btn btn-success btn-round mt-2 document-user-upload-result">
-                                                        <i class="material-icons">photo</i> {{__('Update Photo')}}
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="col-md-3">
                                     <div class="card">
                                         <div class="card-body">
-                                            <div class="text-center" id="lincenseNumbershowPhoto">
+                                            <div class="text-center" id="documentUserPhoto">
                                                 <div class="thumb thumb-slide mb-2">
-                                                    <div id="lincenseNumberPhotoImg">
-                                                        <img src="{{$user->urlPhoto('lincenseNumber')}}" alt="">
+                                                    <div id="documentUserPhotoImg">
+                                                        <img src="{{$user->urlPhoto('documentUser')}}" alt="">
                                                     </div>
                                                     @can('users_document_edit')
                                                         <div class="caption">
                                                             <span>
-                                                                <a href="#" id="lincenseNumberEditPhoto" class="btn btn-success btn-round"><i class="material-icons">edit</i></a>
+                                                                <a href="#" id="documentUserEditPhoto" class="btn btn-success btn-round">
+                                                                    <i class="material-icons">edit</i>
+                                                                </a>
                                                             </span>
                                                         </div>
                                                     @endcan
                                                 </div>
-                                                <h5>{{__('License Number')}}</h5>
+                                                <h5>{{__('Document')}}</h5>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-12 text-center d-none" id="lincenseNumberUpdatePhoto">
-                                                    <div class="thumb thumb-slide mb-2">
-                                                        <div id="lincense-number-upload-photo-container"></div>
+                                            <div class="row"> 
+                                                <div class="col-md-12 text-center d-none" id="documentUserUpdatePhoto">
+                                                        <div class="thumb thumb-slide mb-2">
+                                                            <div id="document-user-upload-photo-container"></div>
+                                                        </div>
+
+                                                        <input type="file" class="custom-file-input document-user-input" id="documentUserUpload">
+
+                                                        <button class="btn btn-success btn-round mt-2 document-user-upload-result">
+                                                            <i class="material-icons">photo</i> {{__('Update Photo')}}
+                                                        </button>
                                                     </div>
-
-                                                    <input type="file" class="custom-file-input lincense-number-input" id="lincenseNumberUpload">
-
-                                                    <button class="btn btn-success btn-round mt-2 lincense-number-upload-result"><i class="material-icons">photo</i> {{__('Update Photo')}}</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                
+                                    <div class="col-md-3">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="text-center" id="lincenseNumbershowPhoto">
+                                                    <div class="thumb thumb-slide mb-2">
+                                                        <div id="lincenseNumberPhotoImg">
+                                                            <img src="{{$user->urlPhoto('lincenseNumber')}}" alt="">
+                                                        </div>
+                                                        @can('users_document_edit')
+                                                            <div class="caption">
+                                                                <span>
+                                                                    <a href="#" id="lincenseNumberEditPhoto" class="btn btn-success btn-round"><i class="material-icons">edit</i></a>
+                                                                </span>
+                                                            </div>
+                                                        @endcan
+                                                    </div>
+                                                    <h5>{{__('License Number')}}</h5>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12 text-center d-none" id="lincenseNumberUpdatePhoto">
+                                                        <div class="thumb thumb-slide mb-2">
+                                                            <div id="lincense-number-upload-photo-container"></div>
+                                                        </div>
+
+                                                        <input type="file" class="custom-file-input lincense-number-input" id="lincenseNumberUpload">
+
+                                                        <button class="btn btn-success btn-round mt-2 lincense-number-upload-result"><i class="material-icons">photo</i> {{__('Update Photo')}}</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
-                        </div>
 
 
 
@@ -406,20 +407,6 @@
 
         });
 
-
-        $lincenseNumberUploadCrop = $('#lincense-number-upload-photo-container').croppie({
-            url: "{{$user->urlPhoto('lincenseNumber')}}",
-            enableExif: true,
-            viewport: {
-                width: 200,
-                height: 200,
-            },
-            boundary: {
-                width: 250,
-                height: 250
-            }
-        });
-
         $("#lincenseNumberEditPhoto").click(function(){
             $("#lincenseNumbershowPhoto").hide();
             $("#lincenseNumberUpdatePhoto").removeClass('d-none');
@@ -429,32 +416,37 @@
         $('#lincenseNumberUpload').on('change', function () { 
             var reader = new FileReader();
             reader.onload = function (e) {
-                $lincenseNumberUploadCrop.croppie('bind', {
-                    url: e.target.result
-                }).then(function(){
-                    //console.log('jQuery bind complete');
-                });
+                var imgHtml = '<img src="' + e.target.result + '" />';
+                $("#lincense-number-upload-photo-container").html(imgHtml);
             }
-            reader.readAsDataURL(this.files[0]);
+            reader.readAsDataURL(this.files[0])
         });
 
         $('.lincense-number-upload-result').on('click', function (ev) {
-            $lincenseNumberUploadCrop.croppie('result', {
-                type: 'canvas',
-                size: 'viewport'
-            }).then(function (resp) {
+            
+            var formData = new FormData();
+            var fileInput = document.getElementById('lincenseNumberUpload');
+            var file = fileInput.files[0];
+            
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                formData.append('image', event.target.result);
+
                 $.ajax({
                     url: "{{route('user.update_photo', ['name_file' => 'lincenseNumber', 'id' =>$user->id])}}",
                     type: "POST",
-                    data: {"image":resp},
+                    data: formData,
+                    processData: false,
+                    contentType: false,
                     success: function (data) {
-                        html = '<img src="' + resp + '" />';
+                        var imgHtml = '<img src="' + event.target.result + '" />';
                         $("#lincenseNumberPhotoImg").html(html);
                         $("#lincenseNumbershowPhoto").show();
                         $("#lincenseNumberUpdatePhoto").addClass('d-none');
                     }
                 });
-            });
+            };
+            reader.readAsDataURL(file)
         });
 
     </script>
