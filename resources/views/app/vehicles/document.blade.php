@@ -86,7 +86,9 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12 text-center d-none" id="expensiveInsuranceUpdatePhoto">
-                                                    <div id="expensive-insurance-upload-photo-container"></div>
+                                                    <div class="thumb thumb-slide mb-2">
+                                                        <div id="expensive-insurance-upload-photo-container"></div>
+                                                    </div>
 
                                                     <input type="file" class="custom-file-input profile-photo-input" id="expensiveInsuranceUpload">
 
@@ -117,7 +119,9 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12 text-center d-none" id="titleOfTheCarsUpdatePhoto">
-                                                    <div id="title-of-the-cars-upload-photo-container"></div>
+                                                    <div class="thumb thumb-slide mb-2">
+                                                        <div id="title-of-the-cars-upload-photo-container"></div>
+                                                    </div>
 
                                                     <input type="file" class="custom-file-input profile-photo-input" id="titleOfTheCarsUpload">
 
@@ -149,8 +153,9 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-12 text-center d-none" id="updateGalleryPhoto">
-                                                        <div id="gallery-upload-photo-container"></div>
-
+                                                        <div class="thumb thumb-slide mb-2">
+                                                            <div id="gallery-upload-photo-container"></div>
+                                                        </div>
                                                         <input type="file" class="custom-file-input profile-photo-input" id="addGalleryUpload">
 
                                                         <button class="btn btn-success btn-round mt-2 gallery-upload-result"><i class="material-icons">photo</i> {{__('Update Photo')}}</button>
@@ -253,19 +258,6 @@
             }
         });
 
-        $expensiveInsuranceUploadCrop = $('#expensive-insurance-upload-photo-container').croppie({
-            url: "{{$vehicle->urlPhoto('expensiveInsurance')}}",
-            enableExif: true,
-            viewport: {
-                width: 200,
-                height: 200,
-            },
-            boundary: {
-                width: 250,
-                height: 250
-            }
-        });
-
         $("#expensiveInsuranceEditPhoto").click(function(){
             $("#expensiveInsurancePhoto").hide();
             $("#expensiveInsuranceUpdatePhoto").removeClass('d-none');
@@ -275,45 +267,39 @@
         $('#expensiveInsuranceUpload').on('change', function () { 
             var reader = new FileReader();
             reader.onload = function (e) {
-                $expensiveInsuranceUploadCrop.croppie('bind', {
-                    url: e.target.result
-                }).then(function(){
-                    //console.log('jQuery bind complete');
-                });
+                var imgHtml = '<img src="' + e.target.result + '" />';
+                $("#expensive-insurance-upload-photo-container").html(imgHtml);
             }
             reader.readAsDataURL(this.files[0]);
         });
 
         $('.expensive-insurance-upload-result').on('click', function (ev) {
-            $expensiveInsuranceUploadCrop.croppie('result', {
-                type: 'canvas',
-                size: 'viewport'
-            }).then(function (resp) {
+
+            var formData = new FormData();
+            var fileInput = document.getElementById('expensiveInsuranceUpload');
+            var file = fileInput.files[0];
+            
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                formData.append('image', event.target.result);
+
                 $.ajax({
                     url: "{{route('vehicles.update_photo', ['name_file' => 'expensiveInsurance', 'id' =>$vehicle->id])}}",
                     type: "POST",
-                    data: {"image":resp},
+                    data: formData,
+                    processData: false,
+                    contentType: false,
                     success: function (data) {
-                        html = '<img src="' + resp + '" />';
+                        var html = '<img src="' + event.target.result + '" />';
                         $("#expensiveInsurancePhotoImg").html(html);
                         $("#expensiveInsurancePhoto").show();
                         $("#expensiveInsuranceUpdatePhoto").addClass('d-none');
                     }
                 });
-            });
-        });
 
-        $titleOfTheCarUploadCrop = $('#title-of-the-cars-upload-photo-container').croppie({
-            url: "{{$vehicle->urlPhoto('titleOfTheCar')}}",
-            enableExif: true,
-            viewport: {
-                width: 200,
-                height: 200,
-            },
-            boundary: {
-                width: 250,
-                height: 250
-            }
+            };
+
+            reader.readAsDataURL(file);
         });
 
         $("#titleOfTheCarsEditPhoto").click(function(){
@@ -325,45 +311,37 @@
         $('#titleOfTheCarsUpload').on('change', function () { 
             var reader = new FileReader();
             reader.onload = function (e) {
-                $titleOfTheCarUploadCrop.croppie('bind', {
-                    url: e.target.result
-                }).then(function(){
-                    //console.log('jQuery bind complete');
-                });
+                var imgHtml = '<img src="' + e.target.result + '" />';
+                $("#title-of-the-cars-upload-photo-container").html(imgHtml);
             }
-            reader.readAsDataURL(this.files[0]);
+            reader.readAsDataURL(this.files[0])
         });
 
         $('.title-of-the-cars-upload-result').on('click', function (ev) {
-            $titleOfTheCarUploadCrop.croppie('result', {
-                type: 'canvas',
-                size: 'viewport'
-            }).then(function (resp) {
+
+
+            var formData = new FormData();
+            var fileInput = document.getElementById('titleOfTheCarsUpload');
+            var file = fileInput.files[0];
+            
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                formData.append('image', event.target.result);
                 $.ajax({
                     url: "{{route('vehicles.update_photo', ['name_file' => 'titleOfTheCar', 'id' =>$vehicle->id])}}",
                     type: "POST",
-                    data: {"image":resp},
+                    data: formData,
+                    processData: false,
+                    contentType: false,
                     success: function (data) {
-                        html = '<img src="' + resp + '" />';
+                        var html = '<img src="' + event.target.result + '" />';
                         $("#titleOfTheCarsPhotoImg").html(html);
                         $("#titleOfTheCarshowPhoto").show();
                         $("#titleOfTheCarsUpdatePhoto").addClass('d-none');
                     }
                 });
-            });
-        });
-
-        $addGalleryUploadCrop = $('#gallery-upload-photo-container').croppie({
-            url: "{{asset('img/img_photo.png')}}",
-            enableExif: true,
-            viewport: {
-                width: 200,
-                height: 200,
-            },
-            boundary: {
-                width: 250,
-                height: 250
-            }
+            };
+            reader.readAsDataURL(file)
         });
 
         $("#addGalleryEditPhoto").click(function(){
@@ -375,32 +353,34 @@
         $('#addGalleryUpload').on('change', function () { 
             var reader = new FileReader();
             reader.onload = function (e) {
-                console.log(e.target.result);
-                $addGalleryUploadCrop.croppie('bind', {
-                    url: e.target.result
-                }).then(function(){
-                    //console.log('jQuery bind complete');
-                });
+                var imgHtml = '<img src="' + e.target.result + '" />';
+                $("#gallery-upload-photo-container").html(imgHtml);
             }
-            reader.readAsDataURL(this.files[0]);
+            reader.readAsDataURL(this.files[0])
         });
 
         $('.gallery-upload-result').on('click', function (ev) {
-            $addGalleryUploadCrop.croppie('result', {
-                type: 'canvas',
-                size: 'viewport'
-            }).then(function (resp) {
-                console.log(resp);
+            var formData = new FormData();
+            var fileInput = document.getElementById('addGalleryUpload');
+            var file = fileInput.files[0];
+            
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                formData.append('image', event.target.result);
                 $.ajax({
                     url: "{{route('vehicles.update_photo', ['name_file' => 'gallery', 'id' =>$vehicle->id])}}",
                     type: "POST",
-                    data: {"image":resp},
+                    data: formData,
+                    processData: false,
+                    contentType: false,
                     success: function (data) {
                         $("#addGalleryPhoto").show();
                         $("#updateGalleryPhoto").addClass('d-none');
+                        location.reload();                        
                     }
                 });
-            })
+            };
+            reader.readAsDataURL(file)
         });
         
 

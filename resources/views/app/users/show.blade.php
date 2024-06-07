@@ -440,7 +440,7 @@
                     contentType: false,
                     success: function (data) {
                         var imgHtml = '<img src="' + event.target.result + '" />';
-                        $("#lincenseNumberPhotoImg").html(html);
+                        $("#lincenseNumberPhotoImg").html(imgHtml);
                         $("#lincenseNumbershowPhoto").show();
                         $("#lincenseNumberUpdatePhoto").addClass('d-none');
                     }
