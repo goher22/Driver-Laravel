@@ -16,6 +16,10 @@
     <link rel="stylesheet" href="{{ asset('home/css/style.css')}}">
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500' rel='stylesheet' type='text/css'>
     <style>
+
+        section.custom-navbar {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
         /* Responsive Styles */
         .navbar-toggle {
             display: none;
@@ -136,9 +140,6 @@
                 <div class="col-md-12 col-sm-12 text-center">
                     <h3>ADMINISTRA Y MONITOREA</h3>
                     <h2>TU FLOTA DE AUTOS</h2>
-                    <hr>
-                    <a href="#work" class="smoothScroll btn btn-danger">Servicios</a>
-                    <a href="#contact" class="smoothScroll btn btn-default">Contactanos</a>
                 </div>
             </div>
         </div>
